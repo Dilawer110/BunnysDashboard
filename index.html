@@ -11,7 +11,6 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;overflow:hidden;}
 
-/* ══════ THEME TOKENS ══════ */
 body[data-theme="dark"]{
   --bg:#0d1117;--bg2:#161b22;--bg3:#1c2333;--bg4:#21262d;
   --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.16);
@@ -49,10 +48,8 @@ body[data-theme="powerbi"]{
   --font:'Segoe UI','DM Sans',sans-serif;--mono:'Space Mono',monospace;
 }
 
-/* ══════ BASE ══════ */
 body{background:var(--bg);color:var(--text1);font-family:var(--font);transition:background .25s,color .25s;}
 
-/* ══════ TOPBAR ══════ */
 .topbar{
   display:flex;align-items:center;justify-content:space-between;
   padding:0 20px;height:54px;background:var(--bg2);
@@ -71,7 +68,6 @@ body{background:var(--bg);color:var(--text1);font-family:var(--font);transition:
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 .status-lbl{font-size:10px;color:var(--text3);font-family:var(--mono);white-space:nowrap;}
 
-/* Theme switcher */
 .theme-sw{display:flex;align-items:center;gap:3px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:3px;}
 .th-btn{padding:4px 9px;border-radius:5px;border:none;background:transparent;font-size:10px;font-family:var(--mono);color:var(--text3);cursor:pointer;transition:all .15s;letter-spacing:.5px;}
 .th-btn:hover{color:var(--text1);}
@@ -79,10 +75,8 @@ body{background:var(--bg);color:var(--text1);font-family:var(--font);transition:
 body[data-theme="light"] .th-btn.active{color:#fff;}
 body[data-theme="dark"]  .th-btn.active{color:#0d1117;}
 
-/* ══════ LAYOUT ══════ */
 .main-layout{display:flex;position:fixed;top:54px;left:0;right:0;bottom:0;}
 
-/* ══════ SIDEBAR ══════ */
 .sidebar{
   width:232px;min-width:232px;background:var(--bg2);
   border-right:1px solid var(--border);padding:15px 12px;
@@ -115,12 +109,10 @@ body[data-theme="dark"]  .wk-btn.active{color:#0d1117;}
 .kpi-lbl{font-size:11px;color:var(--text2);}
 .kpi-btn.active .kpi-lbl{color:var(--text1);font-weight:500;}
 
-/* ══════ CONTENT ══════ */
 .content{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:14px;background:var(--bg);transition:background .25s;}
 .content::-webkit-scrollbar{width:4px;}
 .content::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
 
-/* ══════ KPI CARDS ══════ */
 .cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:11px;}
 .kpi-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 14px 12px;position:relative;overflow:hidden;transition:border-color .2s,transform .15s,background .25s,box-shadow .25s;box-shadow:var(--card-shadow);}
 .kpi-card:hover{border-color:var(--border2);transform:translateY(-1px);}
@@ -130,7 +122,6 @@ body[data-theme="dark"]  .wk-btn.active{color:#0d1117;}
 body[data-theme="powerbi"] .kpi-card-val{color:var(--accent);}
 .kpi-card-sub{font-size:10px;color:var(--text3);}
 
-/* ══════ CHART PANEL ══════ */
 .chart-panel{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:17px;box-shadow:var(--card-shadow);transition:background .25s,border-color .25s,box-shadow .25s;}
 .chart-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:15px;flex-wrap:wrap;gap:10px;}
 .chart-title{font-size:13px;font-weight:500;color:var(--text1);}
@@ -145,7 +136,6 @@ body[data-theme="powerbi"] .kpi-card-val{color:var(--accent);}
 .s-msg{font-size:12px;color:var(--text3);}
 .s-sub{font-size:10px;color:var(--text3);opacity:.6;}
 
-/* ══════ MOBILE ══════ */
 @media(max-width:768px){
   html,body{overflow:auto;}
   .main-layout{flex-direction:column;position:static;margin-top:54px;}
@@ -187,7 +177,8 @@ body[data-theme="powerbi"] .kpi-card-val{color:var(--accent);}
       <div class="cb-list" id="dist-list"></div>
     </div>
     <div>
-      <span class="f-label">Category</span>
+      <!-- Channel field from data.json is used as the "Category" filter -->
+      <span class="f-label">Channel</span>
       <input class="f-search" id="cat-search" placeholder="Search…" oninput="renderCB('cat')">
       <div class="cb-list" id="cat-list"></div>
     </div>
@@ -253,16 +244,12 @@ function setTheme(t){
   paintKpiColors();
   if(myChart && dailyCache.length) renderChart(dailyCache);
 }
-
 function clr(){ return TC[currentTheme]; }
-
 function hexRgba(hex,a){
   const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
   return `rgba(${r},${g},${b},${a})`;
 }
-
 function cssVar(n){ return getComputedStyle(document.body).getPropertyValue(n).trim(); }
-
 function paintKpiColors(){
   const c=clr();
   KPI_KEYS.forEach((k,i)=>{
@@ -274,7 +261,6 @@ function paintKpiColors(){
   });
   buildLegend();
 }
-
 function buildLegend(){
   const c=clr();
   document.getElementById('legend').innerHTML=KPI_KEYS.map((k,i)=>`
@@ -294,88 +280,103 @@ function fmtDate(o){
   return o.getDate().toString().padStart(2,'0')+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][o.getMonth()];
 }
 function safe(v,d=2){if(v===null||v===undefined||isNaN(v))return '--';return Number(v).toLocaleString('en',{maximumFractionDigits:d});}
-function findKey(r,...ns){
-  const ks=Object.keys(r);
-  for(const n of ns){const k=ks.find(k=>k.trim().toLowerCase()===n.toLowerCase());if(k!==undefined)return(r[k]||'').toString().trim();}
-  return '';
-}
+
+/* ─── parseRow: field names matched exactly to data.json keys ─── */
 function parseRow(r){
-  const ds=findKey(r,'Date','date');
-  const do_=ds?new Date(ds):null;
-  return{
-    date:ds,dateObj:do_,
-    day:do_?do_.getDate():0,
-    week:do_?getWeek(do_.getDate()):'',
-    invoice:    findKey(r,'Invoice Number','InvoiceNumber','invoice_number','invoice'),
-    obCode:     findKey(r,'Order Booker Code','OrderBookerCode','ob_code','order_booker_code'),
-    distributor:findKey(r,'Distributor Name','DistributorName','distributor_name','distributor'),
-    category:   findKey(r,'Category','category'),
-    salesCtn:   parseFloat(findKey(r,'Sales CTN','SalesCTN','sales_ctn','salesctn'))||0,
+  const ds = (r['Date'] || '').toString().trim();
+  const doObj = ds ? new Date(ds) : null;
+  const salesCtn = parseFloat(r['Sales CTN']) || 0;
+  return {
+    date:        ds,
+    dateObj:     doObj,
+    day:         doObj && !isNaN(doObj) ? doObj.getDate() : 0,
+    week:        doObj && !isNaN(doObj) ? getWeek(doObj.getDate()) : '',
+    invoice:     (r['Invoice Number']    || '').toString().trim(),
+    obCode:      (r['Order Booker Code'] || '').toString().trim(),
+    distributor: (r['Distributor Name']  || '').toString().trim(),
+    channel:     (r['Channel']           || '').toString().trim(),   // mapped as "category"
+    skuCode:     (r['SKU Code']          || '').toString().trim(),
+    outletCode:  (r['Outlet Code']       || '').toString().trim(),
+    salesCtn:    salesCtn,
   };
 }
+
 function aggregate(data){
   const m={};
   data.forEach(r=>{
-    if(!r.date)return;
-    if(!m[r.date])m[r.date]={date:r.date,dateObj:r.dateObj,inv:new Set(),obs:new Set(),rows:0,ctn:0};
+    if(!r.date || !r.dateObj || isNaN(r.dateObj)) return;
+    if(!m[r.date]) m[r.date]={date:r.date,dateObj:r.dateObj,inv:new Set(),obs:new Set(),rows:0,ctn:0};
     const d=m[r.date];
-    if(r.invoice)d.inv.add(r.invoice);
-    if(r.obCode) d.obs.add(r.obCode);
-    d.rows++;d.ctn+=r.salesCtn;
+    if(r.invoice) d.inv.add(r.invoice);
+    if(r.obCode)  d.obs.add(r.obCode);
+    d.rows++;
+    d.ctn += r.salesCtn;
   });
-  return Object.values(m).sort((a,b)=>a.dateObj-b.dateObj).map(d=>({
-    date:d.date,dateObj:d.dateObj,
-    bills:d.inv.size,obs:d.obs.size,
-    ctn:Math.round(d.ctn*100)/100,
-    lpo:d.inv.size>0?Math.round((d.rows/d.inv.size)*100)/100:0,
-  }));
+  return Object.values(m)
+    .sort((a,b)=>a.dateObj-b.dateObj)
+    .map(d=>({
+      date:    d.date,
+      dateObj: d.dateObj,
+      bills:   d.inv.size,
+      obs:     d.obs.size,
+      ctn:     Math.round(d.ctn * 100) / 100,
+      lpo:     d.inv.size > 0 ? Math.round((d.rows / d.inv.size) * 100) / 100 : 0,
+    }));
 }
 
-/* ═══════ AUTO LOAD csvjson.json ═══════ */
+/* ═══════ AUTO LOAD data.json ═══════ */
 window.addEventListener('DOMContentLoaded',()=>{
   paintKpiColors();
   showState('loading');
-  fetch('./csvjson.json')
-    .then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+  fetch('./data.json')
+    .then(r=>{
+      if(!r.ok) throw new Error('HTTP '+r.status+' — could not load data.json');
+      return r.json();
+    })
     .then(json=>{
-      const rows=Array.isArray(json)?json:(json.data||json.records||json.rows||[]);
-      if(!rows.length)throw new Error('No rows found in csvjson.json');
+      /* Accept plain array or wrapped { data:[…] } / { records:[…] } */
+      const rows = Array.isArray(json) ? json : (json.data || json.records || json.rows || []);
+      if(!rows.length) throw new Error('data.json loaded but contains no rows');
       processData(rows);
     })
     .catch(err=>{
-      showState('error',err.message);
+      showState('error', err.message);
       document.getElementById('data-status').textContent='Load failed';
     });
 });
 
 function processData(rows){
-  allData  =rows.map(parseRow).filter(r=>r.date&&r.dateObj&&!isNaN(r.dateObj));
-  allDists =[...new Set(allData.map(r=>r.distributor).filter(Boolean))].sort();
-  allCats  =[...new Set(allData.map(r=>r.category).filter(Boolean))].sort();
-  selDists =new Set(allDists);
-  selCats  =new Set(allCats);
-  document.getElementById('data-status').textContent=allData.length.toLocaleString()+' rows';
-  renderCB('dist');renderCB('cat');
+  allData  = rows.map(parseRow).filter(r => r.date && r.dateObj && !isNaN(r.dateObj));
+  allDists = [...new Set(allData.map(r=>r.distributor).filter(Boolean))].sort();
+  allCats  = [...new Set(allData.map(r=>r.channel).filter(Boolean))].sort();
+  selDists = new Set(allDists);
+  selCats  = new Set(allCats);
+  document.getElementById('data-status').textContent = allData.length.toLocaleString()+' rows';
+  renderCB('dist');
+  renderCB('cat');
   updateDashboard();
 }
 
 /* ═══════ FILTERS ═══════ */
 function renderCB(type){
-  const isD=type==='dist';
-  const q=document.getElementById(isD?'dist-search':'cat-search').value.toLowerCase();
-  const arr=(isD?allDists:allCats).filter(i=>i.toLowerCase().includes(q));
-  const sel=isD?selDists:selCats;
-  const el=document.getElementById(isD?'dist-list':'cat-list');
-  el.innerHTML=arr.map(v=>`
-    <div class="cb-row" onclick="toggleF('${type}','${v.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">
-      <input type="checkbox" ${sel.has(v)?'checked':''} onclick="event.stopPropagation();toggleF('${type}','${v.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">
+  const isD = type==='dist';
+  const q   = document.getElementById(isD?'dist-search':'cat-search').value.toLowerCase();
+  const arr = (isD ? allDists : allCats).filter(i=>i.toLowerCase().includes(q));
+  const sel = isD ? selDists : selCats;
+  const el  = document.getElementById(isD?'dist-list':'cat-list');
+  el.innerHTML = arr.map(v=>{
+    const esc = v.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    return `<div class="cb-row" onclick="toggleF('${type}','${esc}')">
+      <input type="checkbox" ${sel.has(v)?'checked':''} onclick="event.stopPropagation();toggleF('${type}','${esc}')">
       <label title="${v}">${v}</label>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 function toggleF(type,val){
-  const s=type==='dist'?selDists:selCats;
-  s.has(val)?s.delete(val):s.add(val);
-  renderCB(type);updateDashboard();
+  const s = type==='dist' ? selDists : selCats;
+  s.has(val) ? s.delete(val) : s.add(val);
+  renderCB(type);
+  updateDashboard();
 }
 function setWeek(w){
   selWeek=w;
@@ -390,44 +391,50 @@ function setKpi(k){
 
 /* ═══════ UPDATE ═══════ */
 function updateDashboard(){
-  const f=allData.filter(r=>selDists.has(r.distributor)&&selCats.has(r.category)&&(selWeek==='All'||r.week===selWeek));
-  if(!f.length){updateCards([]);showState('nodata');return;}
-  dailyCache=aggregate(f);
+  /* Filter uses r.channel (mapped from data.json "Channel") for category filter */
+  const f = allData.filter(r =>
+    selDists.has(r.distributor) &&
+    selCats.has(r.channel) &&
+    (selWeek==='All' || r.week===selWeek)
+  );
+  if(!f.length){ updateCards([]); showState('nodata'); return; }
+  dailyCache = aggregate(f);
   updateCards(dailyCache);
   renderChart(dailyCache);
 }
+
 function updateCards(d){
-  const tot=k=>d.reduce((s,r)=>s+r[k],0);
-  const avg=k=>d.length?tot(k)/d.length:0;
-  document.getElementById('c-ctn').textContent  =d.length?safe(tot('ctn'),1):'--';
-  document.getElementById('c-bills').textContent=d.length?safe(tot('bills'),0):'--';
-  document.getElementById('c-lpo').textContent  =d.length?safe(avg('lpo'),1):'--';
-  document.getElementById('c-obs').textContent  =d.length?Math.max(...d.map(r=>r.obs)):'--';
+  const tot = k => d.reduce((s,r)=>s+r[k],0);
+  const avg = k => d.length ? tot(k)/d.length : 0;
+  document.getElementById('c-ctn').textContent   = d.length ? safe(tot('ctn'),1)  : '--';
+  document.getElementById('c-bills').textContent = d.length ? safe(tot('bills'),0): '--';
+  document.getElementById('c-lpo').textContent   = d.length ? safe(avg('lpo'),1)  : '--';
+  document.getElementById('c-obs').textContent   = d.length ? Math.max(...d.map(r=>r.obs)) : '--';
 }
 
 /* ═══════ CHART ═══════ */
 function renderChart(daily){
-  const c=clr();
-  const colMap={ctn:c.kpi1,bills:c.kpi2,lpo:c.kpi3,obs:c.kpi4};
-  const col=colMap[selKpi];
-  const fill=hexRgba(col,0.12);
-  const labels=daily.map(d=>fmtDate(d.dateObj));
-  const values=daily.map(d=>d[selKpi]);
-  const gridC =cssVar('--grid');
-  const tickC =cssVar('--tick');
-  const ttBg  =cssVar('--tt-bg');
-  const ttBd  =cssVar('--tt-bd');
-  const tx1   =cssVar('--text1');
-  const tx2   =cssVar('--text2');
+  const c      = clr();
+  const colMap = {ctn:c.kpi1,bills:c.kpi2,lpo:c.kpi3,obs:c.kpi4};
+  const col    = colMap[selKpi];
+  const fill   = hexRgba(col,0.12);
+  const labels = daily.map(d=>fmtDate(d.dateObj));
+  const values = daily.map(d=>d[selKpi]);
+  const gridC  = cssVar('--grid');
+  const tickC  = cssVar('--tick');
+  const ttBg   = cssVar('--tt-bg');
+  const ttBd   = cssVar('--tt-bd');
+  const tx1    = cssVar('--text1');
+  const tx2    = cssVar('--text2');
 
   document.getElementById('chart-sub').textContent=`${daily.length} day(s) · metric: ${KPI_NAMES[selKpi]}`;
   buildLegend();
   showState('chart');
 
-  const ctx=document.getElementById('mainChart').getContext('2d');
-  if(myChart){myChart.destroy();myChart=null;}
+  const ctx = document.getElementById('mainChart').getContext('2d');
+  if(myChart){ myChart.destroy(); myChart=null; }
 
-  myChart=new Chart(ctx,{
+  myChart = new Chart(ctx,{
     type:'line',
     data:{
       labels,
@@ -479,9 +486,9 @@ function showState(type,msg=''){
   if(type==='chart'){cw.style.display='block';sw.innerHTML='';return;}
   cw.style.display='none';
   const t={
-    loading:`<div class="state-box"><div class="spinner"></div><div class="s-msg" style="margin-top:10px;font-family:monospace;font-size:11px;">Loading csvjson.json…</div></div>`,
-    error:  `<div class="state-box"><div class="s-icon" style="color:var(--kpi5)">&#9888;</div><div class="s-msg" style="color:var(--kpi5)">${msg}</div><div class="s-sub">Ensure csvjson.json is in the same repo folder as index.html</div></div>`,
-    nodata: `<div class="state-box"><div class="s-icon">&#9671;</div><div class="s-msg">No data for selected filters</div><div class="s-sub">Adjust distributor, category, or week</div></div>`,
+    loading:`<div class="state-box"><div class="spinner"></div><div class="s-msg" style="margin-top:10px;font-family:monospace;font-size:11px;">Loading data.json…</div></div>`,
+    error:  `<div class="state-box"><div class="s-icon" style="color:var(--kpi5)">&#9888;</div><div class="s-msg" style="color:var(--kpi5)">${msg}</div><div class="s-sub">Ensure data.json is in the same folder as index.html</div></div>`,
+    nodata: `<div class="state-box"><div class="s-icon">&#9671;</div><div class="s-msg">No data for selected filters</div><div class="s-sub">Adjust distributor, channel, or week</div></div>`,
   };
   sw.innerHTML=t[type]||'';
 }
